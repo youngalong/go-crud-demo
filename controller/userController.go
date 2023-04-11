@@ -5,6 +5,7 @@ import (
 	"go-crud-demo/model"
 	"go-crud-demo/utils"
 	"net/http"
+	"strconv"
 )
 
 // 增
@@ -79,7 +80,15 @@ func UpdateUser(context *gin.Context) {
 // 查
 func GetUserList(context *gin.Context) {
 	var userList []*model.User
-	err := utils.DB.Find(&userList).Error
+	var offSetVal, total int
+	pageNo, _ := strconv.Atoi(context.Query("pageNo"))
+	pageSize, _ := strconv.Atoi(context.Query("pageSize"))
+	if pageNo == 0 && pageSize == 0 {
+		offSetVal = -1
+	} else {
+		offSetVal = (pageNo - 1) * pageSize
+	}
+	err := utils.DB.Model(&userList).Count(&total).Limit(pageSize).Offset(offSetVal).Find(&userList).Error
 	if err != nil {
 		context.JSON(http.StatusOK, gin.H{
 			"code": 400,
