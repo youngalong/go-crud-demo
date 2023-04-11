@@ -79,7 +79,7 @@ func UpdateUser(context *gin.Context) {
 
 // 查
 func GetUserList(context *gin.Context) {
-	var userList []*model.User
+	var userList []model.User
 	var offSetVal, total int
 	pageNo, _ := strconv.Atoi(context.Query("pageNo"))
 	pageSize, _ := strconv.Atoi(context.Query("pageSize"))
@@ -98,8 +98,13 @@ func GetUserList(context *gin.Context) {
 	} else {
 		context.JSON(http.StatusOK, gin.H{
 			"code": 200,
-			"data": userList,
-			"msg":  "查询成功",
+			"data": gin.H{
+				"list":     userList,
+				"pageNo":   pageNo,
+				"pageSize": pageSize,
+				"total":    total,
+			},
+			"msg": "查询成功",
 		})
 	}
 }

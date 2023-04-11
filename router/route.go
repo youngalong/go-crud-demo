@@ -8,11 +8,11 @@ import (
 func SetRoute() *gin.Engine {
 	r := gin.Default()
 	//增
-	r.PUT("/user", controller.AddUser)
+	r.POST("/user", controller.AddUser)
 	//删
 	r.DELETE("/user/:id", controller.DeleteUser)
 	//改
-	r.POST("/user/:id", controller.UpdateUser)
+	r.PUT("/user/:id", controller.UpdateUser)
 	//查
 	r.GET("/user", controller.GetUserList)
 	r.GET("/user/:name", controller.GetUserByName)
